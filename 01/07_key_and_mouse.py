@@ -32,9 +32,11 @@ def mouse(button, state, x, y):
 
     if button==GLUT_LEFT_BUTTON and state==GLUT_DOWN: #左クリックで押したとき
         vertices.append([x_,y_]) #リストに描画対象の座標(_x, _y)を追加
+        glutPostRedisplay() #画面を再描画
     if button==GLUT_RIGHT_BUTTON and state==GLUT_DOWN: #右クリックで押したとき
         if vertices: #リストの中が空じゃなければ
             vertices.pop() #リストの最後の要素を削除
+            glutPostRedisplay() #画面を再描画
 
 if __name__ == "__main__":
     glutInit(sys.argv) #ライブラリの初期化
