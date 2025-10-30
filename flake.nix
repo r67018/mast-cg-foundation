@@ -14,6 +14,7 @@
           pythonEnv = python.withPackages (ps: with ps; [
             pyopengl
             pyopengl-accelerate
+            numpy
           ]);
         in {
           default = pkgs.${system}.mkShell {
