@@ -108,6 +108,43 @@ def display():
                 glVertex2dv(p)
         glEnd()
 
+        # 法線ベクトルの描画
+        glColor3d(0., 0., 1.)
+        glLineWidth(1)
+        normal_length = 30.0  # 法線ベクトルの長さ
+
+        num_normals = 15  # 法線を表示する数
+        glBegin(GL_LINES)
+        for t in np.linspace(t_start, t_end-0.0001, num_normals):
+            # 現在の点を計算
+            p = np.array([0., 0.])
+            for i in range(len(g_ControlPoints)):
+                N = getBaseN(i, n, t)
+                p += N * g_ControlPoints[i]
+
+            # 接線ベクトルを近似計算
+            delta_t = 0.01
+            p_next = np.array([0., 0.])
+            for i in range(len(g_ControlPoints)):
+                N_next = getBaseN(i, n, min(t + delta_t, t_end - 0.0001))
+                p_next += N_next * g_ControlPoints[i]
+
+            # 接線ベクトル
+            tangent = p_next - p
+            tangent_norm = np.linalg.norm(tangent)
+
+            if tangent_norm > 1e-6:  # ゼロ除算を避ける
+                # 接線を正規化
+                tangent = tangent / tangent_norm
+
+                # 90度回転
+                normal = np.array([-tangent[1], tangent[0]])
+
+                p_end = p + normal * normal_length
+                glVertex2dv(p)
+                glVertex2dv(p_end)
+        glEnd()
+
     glFlush() #画面出力
 
 # ウィンドウのサイズが変更されたときの処理
