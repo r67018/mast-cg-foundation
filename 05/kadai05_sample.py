@@ -113,7 +113,7 @@ def display():
         glLineWidth(1)
         normal_length = 30.0  # 法線ベクトルの長さ
 
-        num_normals = 15  # 法線を表示する数
+        num_normals = 100  # 法線を表示する数
         glBegin(GL_LINES)
         for t in np.linspace(t_start, t_end-0.0001, num_normals):
             # 現在の点を計算
