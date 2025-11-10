@@ -36,8 +36,34 @@ def display():
     glColor3d(0., 0., 0.)
     glLineWidth(2)
     # 【ここにベジェ曲線を描画するためのコードを記述する】
-    if len(g_ControlPoints) % 3 == 1:
-        pass
+    glBegin(GL_LINE_STRIP)
+    num_lines = (len(g_ControlPoints) - 1) // 3
+    for i in range(0, num_lines):
+        p = g_ControlPoints[i*3:i*3+4]
+        for t in np.linspace(0.0, 1.0, 100):
+            pt = (1-t)**3*p[0] + 3*t*(1-t)**2*p[1] + 3*t**2*(1-t)*p[2] + t**3*p[3]
+            glVertex2dv(pt)
+    glEnd()
+
+    # 法線ベクトルを描画
+    glColor3d(0., 0., 1.)
+    glLineWidth(1)
+    glBegin(GL_LINES)
+    for i in range(0, num_lines):
+        p = g_ControlPoints[i*3:i*3+4]
+        for t in np.linspace(0.0, 1.0, 100):
+            pt = (1-t)**3*p[0] + 3*t*(1-t)**2*p[1] + 3*t**2*(1-t)*p[2] + t**3*p[3]
+            dpt = -3*(1-t)**2*p[0] + (9*t**2 - 12*t + 3)*p[1] + (-9*t**2 + 6*t)*p[2] + 3*t**2*p[3]
+            n = np.array([-dpt[1], dpt[0]])
+            n_normalized = n / np.linalg.norm(n)
+
+            d2pt = 6*(1-t)*p[0] + (18*t - 12)*p[1] + (-18*t + 6)*p[2] + 6*t*p[3]
+            det = dpt[0]*d2pt[1] - dpt[1]*d2pt[0]
+            k = abs(det) / abs(np.linalg.norm(dpt)**3)
+
+            glVertex2dv(pt)
+            glVertex2dv(pt + n_normalized * k * 10000)
+    glEnd()
 
     glFlush() #画面出力
 
