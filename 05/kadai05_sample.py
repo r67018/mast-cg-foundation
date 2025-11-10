@@ -11,7 +11,7 @@ g_ControlPoints = []
 g_WindowWidth = 512
 g_WindowHeight = 512
 
-# Bスプラインの次数（キーボードで変更可能）
+# Bスプラインの次数
 g_Degree = 3
 
 # ノットベクトル
@@ -78,7 +78,7 @@ def display():
     # ヒント1: 3次Bスプラインの場合は制御点を4つ入れるまでは何も描けない
     # ヒント2: パラメータtの値の取り得る範囲に注意
 
-    n = 3
+    n = g_Degree
     if len(g_ControlPoints) >= n + 1:
         t_start = g_NotVector[n]
         t_end = g_NotVector[len(g_ControlPoints)]
@@ -133,7 +133,7 @@ def mouse(button, state, x, y):
         if button == GLUT_LEFT_BUTTON:
             # ノット数を増やせばいくらでも制御点を追加できるが、今回はノットベクトルが固定されているので
             # いくらでも追加できるわけではない
-            if len(g_ControlPoints) < len(g_NotVector) - 4 :
+            if len(g_ControlPoints) < len(g_NotVector) - (g_Degree + 1):
                 g_ControlPoints.append(np.array([x, y]))
 
         # 右ボタンだったら末尾の制御点を削除
